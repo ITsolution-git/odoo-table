@@ -301,13 +301,18 @@ export default class ProductListView extends Component {
           </Card.Body>
         </Card>
         <Button
-          text="PAY"
+          text="CHECKOUT"
           disabled={cart_items.length < 1 ? true : false}
           raised={true}
           primary={theme}
           theme='dark'
-          onPress={this.onPayButtonPress.bind(this)}
+          onPress={ () => {
+            navigator.forward('checkout_view', null, {cart_items});
+          }}
         />
+        {
+          // onPress={this.onPayButtonPress.bind(this)}
+        }
       </View>
     )// return
   }// renderCartTotal

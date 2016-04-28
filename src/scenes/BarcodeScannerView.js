@@ -21,7 +21,7 @@ export default class BarcodeScannerView extends Component {
 
     this.state = {
       torchMode: 'off',
-      cameraType: 'back',
+      cameraType: 'front',
     };
   }
 

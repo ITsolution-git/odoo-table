@@ -9,7 +9,8 @@
     "buildDebug": "cd android && ./gradlew assembleDebug",
     "installDebug": "cd android && ./gradlew installDebug",
     "buildRelease": "cd android && ./gradlew assembleRelease",
-    "installRelease": "cd android && ./gradlew installRelease"
+    "installRelease": "cd android && ./gradlew installRelease",
+    "openDeviceMenu": "adb shell input keyevent 82"
   },
   "dependencies": {
     "@remobile/react-native-splashscreen": "^1.0.3",

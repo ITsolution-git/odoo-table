@@ -7,12 +7,16 @@ export default {
 
     children: {
       barcode_scanner_view: {
-        title: 'Barcode Scanner',
+        title: 'SCAN ITEM BARCODE',
         component: require('./scenes/BarcodeScannerView').default,
       },
       login_view: {
-        title: 'Sign In',
+        title: 'SIGN IN',
         component: require('./scenes/Auth0LoginView').default,
+      },
+      checkout_view: {
+        title: 'CHECKOUT',
+        component: require('./scenes/CheckoutView').default,
       }
     }
   }
