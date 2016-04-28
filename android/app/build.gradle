@@ -138,7 +138,6 @@ android {
 }
 
 dependencies {
-    compile project(':randombytes')
     compile project(':react-native-lock')
     compile project(':ReactNativeBarcodescanner')
     compile project(':realm')

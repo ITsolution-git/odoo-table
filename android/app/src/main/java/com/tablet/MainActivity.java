@@ -11,7 +11,6 @@ import me.neo.react.StatusBarPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.eguma.barcodescanner.BarcodeScanner;
-import com.bitgo.randombytes.RandomBytesPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +50,6 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new RandomBytesPackage(),
             new LockReactPackage(),
             new BarcodeScanner(),
             new RealmReactPackage(),
