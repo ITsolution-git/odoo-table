@@ -14,6 +14,7 @@
   "dependencies": {
     "@remobile/react-native-splashscreen": "^1.0.3",
     "alt": "^0.18.1",
+    "fbjs": "^0.8.1",
     "numeral": "^1.5.3",
     "query-string": "^4.0.2",
     "react": "^0.14.8",

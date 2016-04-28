@@ -23,10 +23,6 @@ import {
 
 var numeral = require('numeral');
 
-// import {
-//   encode as jwt_encode
-// } from 'react-native-jwt';
-
 import {
   get_signed_token
 } from '../utils/token_api.js';
@@ -376,17 +372,6 @@ export default class ProductListView extends Component {
       stripe_form_data,
       customer_profile
     });// get_signed_token
-
-    // // https://github.com/StanScates/react-native-jwt
-    // var token = jwt_encode(
-    //   {
-    //     sales_order_data,
-    //     stripe_form_data,
-    //     customer_profile
-    //   },
-    //   'ixa8a0cOR-zc6Rv6ZF6ip6Z8Du-uP8r7mp3w4JTSn_vODSTkX0TkdM6Bo7hwEe7g',
-    //   'HS256'
-    // );// jwt_encode
 
     return token;
   }// generateOrderUrl
