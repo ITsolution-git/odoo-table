@@ -64,32 +64,37 @@ export default class CheckoutView extends Component {
     Auth0CustomerLogin(async (err, profile, token) => {
       if(err) {
         console.log(err);
-        return;
-      }// if
-
-      let customer_id = await get_customer_id(profile);
-      console.log('customer id: ', customer_id);
-      profile.customer_id = customer_id; // add customer_id info from Odoo
-
-      await this.submitOrder(customer_id, profile);
-
-      let invoice_url_token = await this.generateOrderUrl(profile);
-      console.log(invoice_url_token);
-
-      try {
-        const send_response = await send_order_url_to_customer(invoice_url_token);
-        console.log(send_response);
         this.setState({
-          checkout_done: true,
-          checkout_error: false
-        });
-      } catch (e) {
-        console.warn(e);
-        this.setState({
-          checkout_done: true,
+          checkout_done: false,
           checkout_error: true
         });
-      }// try-catch
+
+      } else {
+
+        let customer_id = await get_customer_id(profile);
+        console.log('customer id: ', customer_id);
+        profile.customer_id = customer_id; // add customer_id info from Odoo
+
+        await this.submitOrder(customer_id, profile);
+
+        let invoice_url_token = await this.generateOrderUrl(profile);
+        console.log(invoice_url_token);
+
+        try {
+          const send_response = await send_order_url_to_customer(invoice_url_token);
+          console.log(send_response);
+          this.setState({
+            checkout_done: true,
+            checkout_error: false
+          });
+        } catch (e) {
+          console.warn(e);
+          this.setState({
+            checkout_done: true,
+            checkout_error: true
+          });
+        }// try-catch
+      }// if-else
     });// Auth0CustomerLogin
   }// initiateCheckoutProcess
 
@@ -195,17 +200,17 @@ export default class CheckoutView extends Component {
 
     return (
       <View>
-        <View style={styles.loadingView}>
-          <Text style={styles.header}>
-            Oops! Having trouble processing your checkout
-          </Text>
-        </View>
         <View style={styles.statusIcon}>
           <Icon
             name="error"
             color="paperRed300"
             size={64}
           />
+        </View>
+        <View style={styles.loadingView}>
+          <Text style={styles.header}>
+            Oops! Unable to process your checkout
+          </Text>
         </View>
       </View>
     );// return
@@ -215,7 +220,6 @@ export default class CheckoutView extends Component {
     const { theme, navigator } = this.context;
     const { cart_items } = this.props;
     const { checkout_done, checkout_error } = this.state;
-    console.log(cart_items);
     const themeColor = COLOR[`${theme}500`].color;
 
     var bgColor = `#904caf50`;
@@ -235,6 +239,16 @@ export default class CheckoutView extends Component {
         {
           statusView
         }
+          <Button
+            text="BACK TO PRODUCTS LIST"
+            disabled={(checkout_done || checkout_error) ? false : true}
+            raised={true}
+            primary={checkout_error? "paperRed300" : theme}
+            theme='dark'
+            onPress={ () => {
+              navigator.to('product_list', null, null);
+            }}
+          />
       </View>
     );// return
   }// render

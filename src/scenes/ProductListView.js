@@ -24,25 +24,8 @@ import {
 var numeral = require('numeral');
 
 import {
-  get_signed_token
-} from '../utils/token_api.js';
-
-import {
   fetchProducts
 } from '../utils/realm_db.js';
-
-import {
-  login as Auth0CustomerLogin
-} from './Auth0LoginView';
-
-import {
-  add_transaction
-} from '../utils/transaction_api.js';
-
-import {
-  get_customer_id,
-  send_order_url_to_customer
-} from '../utils/customer_api.js';
 
 export default class ProductListView extends Component {
 
@@ -68,7 +51,7 @@ export default class ProductListView extends Component {
   }// updateProducts
 
   async componentDidMount() {
-    // console.log(this.props);
+    console.log(this.state.cart_items);
     let barcode = this.props.barcode || {data:'', type: ''};
     // this.refs.SearchByNameTextInput.setNativeProps({text: barcode.data});
     try {
@@ -189,36 +172,6 @@ export default class ProductListView extends Component {
     return (
       <View style={styles.productSearchContainer}>
         <View style={styles.searchProductColumn}>
-          {
-          // <Button
-          //   text="SEARCH FOR AN ITEM"
-          //   raised={true}
-          //   primary={theme}
-          //   onPress={ () => { this.onSearchButtonPress(products, 'k') }}
-          // />
-          // <TextInput
-          //   style={styles.subheader}
-          //   ref='SearchByBarcodeTextInput'
-          //   autoCapitalize='characters'
-          //   autoCorrect={false}
-          //   keyboardType='numeric'
-          //   maxLength={20}
-          //   placeholder='SEARCH BY BARCODE'
-          //   placeholderTextColor={themeColor}
-          //   underlineColorAndroid={themeColor}
-          //   onBlur={() => {
-          //     console.log('Barcode TextInput blurred');
-          //     // this.onSearchButtonPress(products, '');
-          //     // this.refs.SearchByNameTextInput.setNativeProps({text: ''});
-          //   }}
-          //   onSubmitEditing={() => {
-          //     console.log('Barcode TextInput submitted');
-          //     // this.onSearchButtonPress(products, '');
-          //     // this.refs.SearchByNameTextInput.setNativeProps({text: ''});
-          //   }}
-          //   onChangeText={(text) => this.onSearchButtonPress(products, text) }
-          // />
-          }
           <TextInput
             style={styles.subheader}
             ref='SearchByNameTextInput'
@@ -262,13 +215,13 @@ export default class ProductListView extends Component {
                   console.log(b);
                 }
               });
-              // this.onSearchButtonPress(products, "b");
             }}
           />
         </View>
       </View>
     );// return
-  }
+  }// renderProductSearchView
+
 
   calculateCartItemsTotal() {
     const { cart_items } = this.state;
@@ -285,9 +238,6 @@ export default class ProductListView extends Component {
     const { theme, navigator } = this.context;
 
     let cart_total = this.calculateCartItemsTotal();
-    // cart_items.map((item) => {
-    //   cart_total += item.list_price;
-    // })
 
     return (
       <View style={styles.item_card}>
@@ -316,77 +266,6 @@ export default class ProductListView extends Component {
       </View>
     )// return
   }// renderCartTotal
-
-  async onPayButtonPress(e)  {
-    generateOrderUrl = this.generateOrderUrl;
-    submitOrder = this.submitOrder;
-
-    Auth0CustomerLogin(async (err, profile, token) => {
-      if(err) {
-        console.log(err);
-        return;
-      }// if
-
-      let customer_id = await get_customer_id(profile);
-      console.log('customer id: ', customer_id);
-      profile.customer_id = customer_id; // add customer_id info from Odoo
-
-      await this.submitOrder(customer_id, profile);
-
-      let invoice_url_token = await this.generateOrderUrl(profile);
-      console.log(invoice_url_token);
-
-      try {
-        const send_response = await send_order_url_to_customer(invoice_url_token);
-        console.log(send_response);
-      } catch (e) {
-        console.warn(e);
-      }// try-catch
-    });// Auth0CustomerLogin
-  }// onPayButtonPress
-
-  generateOrderObject(customer_id) {
-    let orders = this.state.cart_items.map((item) => {
-      return ({
-        product_id: item.id,
-        product_qty: 1
-      });// return
-    });// orders
-
-    let sales_order_data = {
-      "customer_id": customer_id || null,
-      "payment_method": 'cash',
-      "orders": orders
-    };// sales_order_data
-
-    return sales_order_data;
-  }// generateOrderObject
-
-  async generateOrderUrl(customer_profile) {
-    const customer_id = customer_profile.customer_id || null;
-    const sales_order_data = this.generateOrderObject(customer_id);
-
-    let stripe_form_data = {
-      amount: this.calculateCartItemsTotal(),
-      currency: 'usd',
-      description: 'Kiosk Purchases'
-    };// stripe_form_data
-
-    var token = await get_signed_token({
-      sales_order_data,
-      stripe_form_data,
-      customer_profile
-    });// get_signed_token
-
-    return token;
-  }// generateOrderUrl
-
-  async submitOrder(customer_id, auth0_profile)  {
-    let sales_data = this.generateOrderObject(customer_id);
-
-    var tx_data = await add_transaction(sales_data, auth0_profile);
-    console.log(tx_data);
-  }// submitOrder
 
   render () {
     const { theme } = this.context;
