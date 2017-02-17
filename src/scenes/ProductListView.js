@@ -55,11 +55,11 @@ export default class ProductListView extends Component {
     let barcode = this.props.barcode || {data:'', type: ''};
     // this.refs.SearchByNameTextInput.setNativeProps({text: barcode.data});
     try {
-      // console.log('Start fetchProducts(): ', new Date().getSeconds());
+      console.log('Start fetchProducts(): ', new Date().getSeconds());
       const products = await fetchProducts({
         max: 10,
       });
-      // console.log('End fetchProducts(): ', new Date().getSeconds());
+      console.log('End fetchProducts(): ', new Date().getSeconds());
       // console.log('Start updateProducts(): ', new Date().getSeconds());
       this.updateProducts(products);
       // console.log('End updateProducts(): ', new Date().getSeconds());

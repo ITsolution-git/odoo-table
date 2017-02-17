@@ -56,7 +56,7 @@ public class MainActivity extends ReactActivity {
             new CodePush("gkuagDxk5gnEDnDwdZmfTr-tlLasNk9RjKD1-", this, BuildConfig.DEBUG),
             new VectorIconsPackage(),
             new RCTSplashScreenPackage(this),
-            new StatusBarPackage(this),
+            new StatusBarPackage(),
             new ReactNativeConfigPackage()
         );
     }
