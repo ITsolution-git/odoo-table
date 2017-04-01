@@ -6,7 +6,7 @@ class AppActions {
 
     updateTheme(name) {
         // StatusBarAndroid.setHexColor(COLOR[`${name}700`].color);
-        StatusBarAndroid.setHexColor("#000000");
+        StatusBarAndroid.setHexColor("#00ff00");
         return name;
     }
 
